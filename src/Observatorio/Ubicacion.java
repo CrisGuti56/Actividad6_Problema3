@@ -12,15 +12,15 @@ public class Ubicacion {
     private String hemisferioLongitudinal;
 
     private static final double LATITUD_MINIMA  = 0;
-    private static final double LATITUD_MAXIMA  = 90;
+    private static final double LATITUD_MAXIMA  = 180;
     private static final double LONGITUD_MINIMA = 0;
     private static final double LONGITUD_MAXIMA = 180;
 
     public Ubicacion(double latitud, String hemisferioLatitudinal,
                      double longitud, String hemisferioLongitudinal)
             throws ExcepcionDeLatitudInvalida,
-                   ExcepcionDeLongitudInvalida,
-                   ExcepcionDeHemisferioInvalido {
+            ExcepcionDeLongitudInvalida,
+            ExcepcionDeHemisferioInvalido {
 
         if (latitud < LATITUD_MINIMA || latitud > LATITUD_MAXIMA)
             throw new ExcepcionDeLatitudInvalida(
@@ -44,29 +44,16 @@ public class Ubicacion {
         this.hemisferioLongitudinal = hemisferioLongitudinal;
     }
 
-    public double getLatitud() {
-        return latitud;
-    }
-
-    public String getHemisferioLatitudinal() {
-        return hemisferioLatitudinal;
-    }
-
-    public double getLongitud() {
-        return longitud;
-    }
-
-    public String getHemisferioLongitudinal() {
-        return hemisferioLongitudinal;
-    }
+    public double getLatitud() { return latitud; }
+    public String getHemisferioLatitudinal() { return hemisferioLatitudinal; }
+    public double getLongitud() { return longitud; }
+    public String getHemisferioLongitudinal() { return hemisferioLongitudinal; }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-
         Ubicacion u = (Ubicacion) obj;
-
         return Double.compare(latitud, u.latitud) == 0 &&
                 Double.compare(longitud, u.longitud) == 0 &&
                 hemisferioLatitudinal.equalsIgnoreCase(u.hemisferioLatitudinal) &&

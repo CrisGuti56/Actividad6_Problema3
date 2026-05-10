@@ -4,6 +4,9 @@ import Observatorio.excepciones.ExcepcionDeDistanciaInvalida;
 import Observatorio.excepciones.ExcepcionDeObservacionInvalida;
 import Observatorio.excepciones.ExcepcionDePeriodoInvalido;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Observacion implements Comparable<Observacion> {
 
     private String periodo;
@@ -11,12 +14,21 @@ public class Observacion implements Comparable<Observacion> {
     private String unidadDistancia;
     private Ubicacion ubicacion;
 
+    private static final List<String> MESES_VALIDOS = Arrays.asList(
+            "enero", "febrero", "marzo", "abril", "mayo", "junio",
+            "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+    );
+
     public Observacion(String periodo, double distancia, String unidadDistancia, Ubicacion ubicacion)
             throws ExcepcionDePeriodoInvalido,
-                   ExcepcionDeDistanciaInvalida {
+            ExcepcionDeDistanciaInvalida {
 
         if (periodo == null || periodo.trim().isEmpty())
-            throw new ExcepcionDePeriodoInvalido("El período de la observación no puede ser nulo o vacío.");
+            throw new ExcepcionDePeriodoInvalido("El período no puede ser nulo o vacío.");
+
+        if (!MESES_VALIDOS.contains(periodo.trim().toLowerCase()))
+            throw new ExcepcionDePeriodoInvalido(
+                    "El período debe ser un mes válido. Se recibió: " + periodo);
 
         if (distancia <= 0)
             throw new ExcepcionDeDistanciaInvalida(
@@ -28,21 +40,10 @@ public class Observacion implements Comparable<Observacion> {
         this.ubicacion = ubicacion;
     }
 
-    public String getPeriodo() {
-        return periodo;
-    }
-
-    public double getDistancia() {
-        return distancia;
-    }
-
-    public String getUnidadDistancia() {
-        return unidadDistancia;
-    }
-
-    public Ubicacion getUbicacion() {
-        return ubicacion;
-    }
+    public String getPeriodo() { return periodo; }
+    public double getDistancia() { return distancia; }
+    public String getUnidadDistancia() { return unidadDistancia; }
+    public Ubicacion getUbicacion() { return ubicacion; }
 
     public Desplazamiento obtenerDesplazamiento(Observacion observacionComparada)
             throws ExcepcionDeObservacionInvalida {
@@ -51,39 +52,24 @@ public class Observacion implements Comparable<Observacion> {
             throw new ExcepcionDeObservacionInvalida("La observación comparada no puede ser null.");
 
         double lat1 = this.ubicacion.getHemisferioLatitudinal().equalsIgnoreCase("S")
-                ? -this.ubicacion.getLatitud()
-                : this.ubicacion.getLatitud();
-
+                ? -this.ubicacion.getLatitud() : this.ubicacion.getLatitud();
         double lat2 = observacionComparada.getUbicacion().getHemisferioLatitudinal().equalsIgnoreCase("S")
-                ? -observacionComparada.getUbicacion().getLatitud()
-                : observacionComparada.getUbicacion().getLatitud();
-
+                ? -observacionComparada.getUbicacion().getLatitud() : observacionComparada.getUbicacion().getLatitud();
         double lon1 = this.ubicacion.getHemisferioLongitudinal().equalsIgnoreCase("O")
-                ? -this.ubicacion.getLongitud()
-                : this.ubicacion.getLongitud();
-
+                ? -this.ubicacion.getLongitud() : this.ubicacion.getLongitud();
         double lon2 = observacionComparada.getUbicacion().getHemisferioLongitudinal().equalsIgnoreCase("O")
-                ? -observacionComparada.getUbicacion().getLongitud()
-                : observacionComparada.getUbicacion().getLongitud();
+                ? -observacionComparada.getUbicacion().getLongitud() : observacionComparada.getUbicacion().getLongitud();
 
-        double deltaLatitud  = lat1 - lat2;
-        double deltaLongitud = lon1 - lon2;
-        double deltaDistancia = this.distancia - observacionComparada.getDistancia();
-
-        return new Desplazamiento(deltaLatitud, deltaLongitud, deltaDistancia);
+        return new Desplazamiento(lat1 - lat2, lon1 - lon2, this.distancia - observacionComparada.getDistancia());
     }
 
     @Override
     public int compareTo(Observacion otra) {
         int r = 0;
-        if ((r = Double.compare(this.distancia, otra.distancia)) != 0)
-            return r;
-        if ((r = this.periodo.compareToIgnoreCase(otra.periodo)) != 0)
-            return r;
-        if ((r = this.unidadDistancia.compareToIgnoreCase(otra.unidadDistancia)) != 0)
-            return r;
-        if ((r = Double.compare(this.ubicacion.getLatitud(), otra.ubicacion.getLatitud())) != 0)
-            return r;
+        if ((r = Double.compare(this.distancia, otra.distancia)) != 0) return r;
+        if ((r = this.periodo.compareToIgnoreCase(otra.periodo)) != 0) return r;
+        if ((r = this.unidadDistancia.compareToIgnoreCase(otra.unidadDistancia)) != 0) return r;
+        if ((r = Double.compare(this.ubicacion.getLatitud(), otra.ubicacion.getLatitud())) != 0) return r;
         return Double.compare(this.ubicacion.getLongitud(), otra.ubicacion.getLongitud());
     }
 
@@ -91,9 +77,7 @@ public class Observacion implements Comparable<Observacion> {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-
         Observacion o = (Observacion) obj;
-
         return Double.compare(distancia, o.distancia) == 0 &&
                 periodo.equalsIgnoreCase(o.periodo) &&
                 unidadDistancia.equalsIgnoreCase(o.unidadDistancia) &&

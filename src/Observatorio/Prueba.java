@@ -63,7 +63,7 @@ public class Prueba {
             System.out.println("ERROR tipo incorrecto: " + e.getMessage());
         }
 
-        System.out.println("\n=== 6. Prueba ExcepcionDePeriodoInvalido ===");
+        System.out.println("\n=== 6. Prueba ExcepcionDePeriodoInvalido (vacio) ===");
         try {
             Ubicacion u = new Ubicacion(10, "N", 20, "E");
             Observacion obsMala = new Observacion("", 4.5, "años luz", u);
@@ -74,7 +74,18 @@ public class Prueba {
             System.out.println("ERROR tipo incorrecto: " + e.getMessage());
         }
 
-        System.out.println("\n=== 7. Prueba ExcepcionDeDistanciaInvalida ===");
+        System.out.println("\n=== 7. Prueba ExcepcionDePeriodoInvalido (mes invalido) ===");
+        try {
+            Ubicacion u = new Ubicacion(10, "N", 20, "E");
+            Observacion obsMala = new Observacion("Martes", 4.5, "años luz", u);
+            System.out.println("ERROR - Debio lanzar excepcion!!");
+        } catch (ExcepcionDePeriodoInvalido e) {
+            System.out.println("CON - Periodo invalido: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR tipo incorrecto: " + e.getMessage());
+        }
+
+        System.out.println("\n=== 8. Prueba ExcepcionDeDistanciaInvalida ===");
         try {
             Ubicacion u = new Ubicacion(10, "N", 20, "E");
             Observacion obsMala = new Observacion("Marzo", -3.0, "años luz", u);
@@ -85,7 +96,7 @@ public class Prueba {
             System.out.println("ERROR tipo incorrecto: " + e.getMessage());
         }
 
-        System.out.println("\n=== 8. Prueba ExcepcionDeCuerpoCelesteInvalido (nombre vacio) ===");
+        System.out.println("\n=== 9. Prueba ExcepcionDeCuerpoCelesteInvalido (nombre vacio) ===");
         try {
             CuerpoCeleste cMalo = new CuerpoCeleste("", "Gas");
             System.out.println("ERROR - Debio lanzar excepcion!!");
@@ -95,7 +106,7 @@ public class Prueba {
             System.out.println("ERROR tipo incorrecto: " + e.getMessage());
         }
 
-        System.out.println("\n=== 9. Prueba ExcepcionDeCuerpoCelesteInvalido (composicion vacia) ===");
+        System.out.println("\n=== 10. Prueba ExcepcionDeCuerpoCelesteInvalido (composicion vacia) ===");
         try {
             CuerpoCeleste cMalo = new CuerpoCeleste("Beta-1", "");
             System.out.println("ERROR - Debio lanzar excepcion!!");
@@ -105,7 +116,7 @@ public class Prueba {
             System.out.println("ERROR tipo incorrecto: " + e.getMessage());
         }
 
-        System.out.println("\n=== 10. Prueba ExcepcionDeObservacionInvalida (agregar null) ===");
+        System.out.println("\n=== 11. Prueba ExcepcionDeObservacionInvalida (agregar null) ===");
         try {
             CuerpoCeleste c = new CuerpoCeleste("Gamma-3", "Roca");
             c.agregarObservacion(null);
@@ -116,7 +127,7 @@ public class Prueba {
             System.out.println("ERROR tipo incorrecto: " + e.getMessage());
         }
 
-        System.out.println("\n=== 11. Prueba ExcepcionDeObservacionInvalida (desplazamiento null) ===");
+        System.out.println("\n=== 12. Prueba ExcepcionDeObservacionInvalida (desplazamiento null) ===");
         try {
             Ubicacion u = new Ubicacion(10, "N", 20, "E");
             Observacion obs = new Observacion("Abril", 5.0, "años luz", u);
